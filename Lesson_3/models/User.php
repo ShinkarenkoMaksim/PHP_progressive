@@ -12,5 +12,12 @@ class User extends Model
         return 'users';
     }
 
+    public function __construct($login = null, $pass = null)
+    {
+        parent::__construct();
+        $this->login = $login;
+        $this->pass = $pass;
+
+    }
 
 }

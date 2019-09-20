@@ -13,4 +13,12 @@ class Basket extends Model
     public function getTableName() {
         return 'basket';
     }
+
+    public function __construct($session_id = null, $product_id = null)
+    {
+        parent::__construct();
+        $this->session_id = $session_id;
+        $this->product_id = $product_id;
+
+    }
 }

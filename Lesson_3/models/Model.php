@@ -33,13 +33,32 @@ abstract class Model implements IModel
 
         $this->db->execute($sql, $params);
 
-        $this->id = $this->db->getConnection()->lastInsertId();
+        return $this->id = $this->db->getConnection()->lastInsertId();
     }
 
     public function delete() {
+        $params['id'] = $this->id;
+
+        $sql = "DELETE FROM `{$this->getTableName()}` WHERE `id`=:id;";
+
+        return $this->db->execute($sql, $params);
 
     }
     public function update() {
+        $params = [];
+        $rowVals = '';
+        foreach ($this as $key => $value){
+            if ($key === 'id' || $key === 'db')
+                continue;
+            $rowVals .= "`" . $key . "`=" . ":" . $key . ", ";
+            $params[$key] = $value;
+        }
+        $params['id'] = $this->id;
+        $rowVals = substr($rowVals, 0 , -2);
+
+        $sql = "UPDATE `{$this->getTableName()}` SET {$rowVals} WHERE `id`=:id;";
+
+        return $this->db->execute($sql, $params);
 
     }
 
@@ -49,7 +68,7 @@ abstract class Model implements IModel
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM {$tableName} WHERE id = :id";
 
-        return $this->db->queryOne($sql, ['id' => $id]);
+        return $this->db->queryOne($sql, ['id' => $id], get_called_class()); // Не уверен, что это оптимальный способ передачи имени класса в Bd, но в самом классе Bd я не смог получить имя нужного класса
     }
 
     public function getAll() {

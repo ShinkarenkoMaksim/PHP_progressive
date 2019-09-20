@@ -10,16 +10,21 @@ spl_autoload_register([new Autoload(), 'loadClass']);
 
 
 
-//$product = new Product('Продукт1', 'Описание продукта 1', '123');
-//$product->insert();
+$product = new Product('Продукт1', 'Описание продукта 1', '123');
+$product->insert();
+$product->name = 'Продукт4';
+$product->update();
+//$product->delete();
 
-
-
-$product = new Product();
-$product->getOne('1');
 var_dump($product);
-//var_dump($product->getOne(1));
+//$basket = new Basket();
 
+//var_dump($basket->getOne(79));
+
+
+
+//$product = new Product();
+//var_dump($product->getOne('1'));
 
 
 

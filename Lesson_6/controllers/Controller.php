@@ -39,12 +39,20 @@ abstract class Controller
 
     public function render($template, $params = []) {
         if ($this->useLayouts) {
+            if (User::isAuth()) {
+                $id = User::getId();
+                $field = 'user_id';
+                var_dump($id);
+            } else {
+                $id = session_id();
+                $field = 'session_id';
+            }
             return $this->renderTemplate("layouts/{$this->layout}", [
                 'content' => $this->renderTemplate($template, $params),
                 'auth' => User::isAuth(),
                 'username' => User::getName(),
                 'menu' => $this->renderTemplate('menu', [
-                    'count' => Basket::getCountWhere('session_id', session_id())
+                    'count' => Basket::getCountWhere($field, $id)
                 ])
             ]);
         } else {

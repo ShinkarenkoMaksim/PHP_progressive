@@ -22,7 +22,7 @@ abstract class DbModel extends Models
         return Db::getInstance()->queryLimit($sql, $from, $to);
 }
 
-    public function getWhere($field, $value) {
+    public static function getWhere($field, $value) {
         $tableName = static::getTableName();
         $sql = "SELECT * FROM {$tableName} WHERE `$field`=:$field";
         return Db::getInstance()->queryObject($sql, ["$field"=>$value], static::class);
@@ -32,16 +32,12 @@ abstract class DbModel extends Models
         $params = [];
         $columns = [];
         $tableName = static::getTableName();
-        //TODO переделать цикл по state чтобы избавиться от условия
-        foreach ($this as $key => $value) {
-            if ($key === "id") continue;
-            $params[":{$key}"] = $value;
+        foreach ($this->state as $key => $value) {
+            $params[":{$key}"] = $this->$key;
             $columns[] = "`$key`";
         }
         $columns = implode(", ", $columns);
         $values = implode(", ", array_keys($params));
-
-//INSERT INTO `products`(`id`, `name`, `description`, `price`) VALUES (:name, ,[value-4])
 
         $sql = "INSERT INTO {$tableName} ({$columns}) VALUES ($values);";
 
@@ -54,8 +50,23 @@ abstract class DbModel extends Models
         $sql = "DELETE FROM {$tableName} WHERE id = :id";
         return Db::getInstance()->execute($sql, ['id' => $this->id]);
     }
+
     public function update() {
-        //TODO реализовать умный update (цикл по state)
+        $params = [];
+        $rowVals = '';
+        foreach ($this as $key => $value){
+            if ($this->state[$key] === true) {
+                $rowVals .= "`" . $key . "`=" . ":" . $key . ", ";
+                $params[$key] = $value;
+                $this->state[$key] = false;
+            }
+        }
+        $params['id'] = $this->id;
+        $rowVals = substr($rowVals, 0 , -2);
+
+        $sql = "UPDATE `{$this->getTableName()}` SET {$rowVals} WHERE `id`=:id;";
+
+        return Db::getInstance()->execute($sql, $params);
     }
 
     public function save() {
@@ -64,13 +75,16 @@ abstract class DbModel extends Models
         } else {
             $this->update();
         }
-
     }
 
     public static function getOne($id) {
         $tableName = static::getTableName();
+
         $sql = "SELECT * FROM {$tableName} WHERE id = :id";
-        return Db::getInstance()->queryObject($sql, ['id' => $id], static::class);
+
+        $request = Db::getInstance()->queryObject($sql, ['id' => $id], static::class);
+
+        return $request;
     }
     public static function getAll() {
         $tableName = static::getTableName();

@@ -35,10 +35,10 @@ if (class_exists($controllerClass)) {
  * @var Product $product
  */
 
-//$product = new Product("Сникерс", "Вкусный", 12);
-//$product->save();
+//$product = new Product("Баунти", "Вкусный", 12);
+//$product = Product::getOne('2');
 //$product->delete();
-
+//$product->save();
 //$product = Product::getCountWhere("sessioin_id",session_id());
 
 //$product->setName("Сникерс2");

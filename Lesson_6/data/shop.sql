@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Сен 27 2019 г., 21:16
+-- Время создания: Сен 29 2019 г., 19:58
 -- Версия сервера: 8.0.15
--- Версия PHP: 7.1.22
+-- Версия PHP: 7.1.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -31,6 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `basket` (
   `id` int(11) NOT NULL,
   `session_id` text NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -38,17 +39,20 @@ CREATE TABLE `basket` (
 -- Дамп данных таблицы `basket`
 --
 
-INSERT INTO `basket` (`id`, `session_id`, `product_id`) VALUES
-(1, '', 2),
-(2, '', 3),
-(3, 'dttavkp4q9o5igel323h36legmv08bl0', 1),
-(4, 'dttavkp4q9o5igel323h36legmv08bl0', 2),
-(5, 'dttavkp4q9o5igel323h36legmv08bl0', 4),
-(6, 'dttavkp4q9o5igel323h36legmv08bl0', 3),
-(7, 'dttavkp4q9o5igel323h36legmv08bl0', 1),
-(8, 'dttavkp4q9o5igel323h36legmv08bl0', 2),
-(9, 'dttavkp4q9o5igel323h36legmv08bl0', 1),
-(10, 'dttavkp4q9o5igel323h36legmv08bl0', 2);
+INSERT INTO `basket` (`id`, `session_id`, `user_id`, `product_id`) VALUES
+(1, '', NULL, 2),
+(2, '', NULL, 3),
+(3, 'dttavkp4q9o5igel323h36legmv08bl0', NULL, 1),
+(4, 'dttavkp4q9o5igel323h36legmv08bl0', NULL, 2),
+(5, 'dttavkp4q9o5igel323h36legmv08bl0', NULL, 4),
+(6, 'dttavkp4q9o5igel323h36legmv08bl0', NULL, 3),
+(7, 'dttavkp4q9o5igel323h36legmv08bl0', NULL, 1),
+(8, 'dttavkp4q9o5igel323h36legmv08bl0', NULL, 2),
+(9, 'dttavkp4q9o5igel323h36legmv08bl0', NULL, 1),
+(10, 'dttavkp4q9o5igel323h36legmv08bl0', NULL, 2),
+(13, 'vltdbnldsptoni6502urtca1l3cubu2m', NULL, 2),
+(16, 'k6lr3pco8rmqial3gnk1fj0toe8bqqd1', 1, 1),
+(17, 'k6lr3pco8rmqial3gnk1fj0toe8bqqd1', 1, 3);
 
 -- --------------------------------------------------------
 
@@ -82,16 +86,17 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`) VALUES
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `login` text NOT NULL,
-  `pass` text NOT NULL
+  `pass` text NOT NULL,
+  `hash` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`id`, `login`, `pass`) VALUES
-(1, 'admin', '123'),
-(2, 'user', '123');
+INSERT INTO `users` (`id`, `login`, `pass`, `hash`) VALUES
+(1, 'admin', '$2y$10$SA9jLv7rQmDclYf/61jqOOIczn1ADVssgvsMuPcjpSFEEM6a0hP8C', '16261822905d90ddd75080a6.39548732'),
+(2, 'user', '$2y$10$9H8Rk3d65RMPQDjdMSfhveUjdqf7JhbrHJ3lA60d2O38c/dz5ghEW', '15491599595d90d3fde839e8.29909314');
 
 --
 -- Индексы сохранённых таблиц
@@ -123,7 +128,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `basket`
 --
 ALTER TABLE `basket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT для таблицы `products`

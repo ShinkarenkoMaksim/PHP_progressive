@@ -42,7 +42,6 @@ abstract class Controller
             if (User::isAuth()) {
                 $id = User::getId();
                 $field = 'user_id';
-                var_dump($id);
             } else {
                 $id = session_id();
                 $field = 'session_id';

@@ -4,7 +4,10 @@ namespace app\controllers;
 
 
 use app\engine\Request;
+use app\models\entities\Order;
+use app\models\repositories\AdminRepository;
 use app\models\repositories\BasketRepository;
+use app\models\repositories\OrderRepository;
 use app\models\repositories\UserRepository;
 use app\models\entities\Basket;
 
@@ -63,4 +66,23 @@ class ApiController extends Controller
         echo json_encode($response);
         exit;
     }
+
+    public function actionStatus() {
+        $adminRepo = new AdminRepository();
+        if ($adminRepo->isAdmin()) {
+            $request = (new Request())->getParams();
+            $order = new Order();
+            $order->setStatus(['id' => $request['id'], 'status' => $request['status']]);
+            (new OrderRepository())->save($order);
+
+            $response = [
+                'result' => 1
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit;
+        }
+    }
+
+
 }

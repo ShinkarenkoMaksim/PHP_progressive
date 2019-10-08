@@ -12,8 +12,6 @@
         <? case 3: ?>Выполнен <? break; ?>
         <? case 4: ?>Отменён <? break; ?>
         <? endswitch; ?></p>
-
-        <button data-id="<?= $item['id_basket']?>" class="cancel">Отменить</button>
     </div>
 
 <? endforeach; ?>

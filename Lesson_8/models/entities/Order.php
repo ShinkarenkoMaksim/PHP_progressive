@@ -44,4 +44,11 @@ class Order extends DataEntity
         $this->user_id = $user_id;
     }
 
+    public function setStatus ($val) :void
+    {
+        $this->id = $val['id'];
+        $this->status = $val['status'];
+        $this->state['status'] = true;
+    }
+
 }

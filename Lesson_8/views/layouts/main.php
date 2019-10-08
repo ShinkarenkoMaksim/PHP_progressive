@@ -40,7 +40,7 @@
 
             })();
         })
-    })
+    });
 
     let buttonsDel = document.querySelectorAll('.delete');
 
@@ -62,6 +62,30 @@
                 document.getElementById('id' + id).innerHTML = '';
             })();
         })
-    })
+    });
+
+    let statusSelector = document.querySelectorAll('.status');
+
+    statusSelector.forEach((elem) => {
+        elem.addEventListener('change', () => {
+            let id = elem.getAttribute('data-id');
+            let stat = elem.value;
+            (async () => {
+                const response = await fetch('/Api/Status/', {
+                    method: 'POST',
+                    headers: new Headers({
+                        'Content-Type': 'application/json'
+                    }),
+                    body: JSON.stringify({
+                        id: id,
+                        status: stat,
+                    }),
+                });
+                const answer = await response.json();
+            })();
+        })
+    });
+
+
 </script>
 </html>

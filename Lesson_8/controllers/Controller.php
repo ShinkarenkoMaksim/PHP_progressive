@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\engine\Render;
 use app\interfaces\IRenderer;
 use app\models\Basket;
+use app\models\repositories\AdminRepository;
 use app\models\repositories\BasketRepository;
 use app\models\repositories\UserRepository;
 use app\models\User;
@@ -53,7 +54,8 @@ abstract class Controller
                 'auth' => (new UserRepository())->isAuth(),
                 'username' => (new UserRepository())->getName(),
                 'menu' => $this->renderTemplate('menu', [
-                    'count' => (new BasketRepository())->getCountWhere($field, $id)
+                    'count' => (new BasketRepository())->getCountWhere($field, $id),
+                    'admin' => (new AdminRepository())->isAdmin()
                 ])
             ]);
         } else {

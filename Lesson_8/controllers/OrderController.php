@@ -43,14 +43,21 @@ class OrderController extends Controller
 
         $params = (new Request())->getParams();
 
-        $order = new Order($params['name'], $params['phone'], $params['email'], session_id(), $user_id);
+        if ($params['name'] == '') //TODO сделать проверку на пустую корзину
+            die('Необходимо ввести имя');
+        elseif ($params['phone'] == '')
+            die(('Необходимо ввести номер телефона'));
+        elseif ($params['email'] == '')
+            die('Необходимо ввести email');
+        else {
+            $order = new Order($params['name'], $params['phone'], $params['email'], session_id(), $user_id);
 
-        $orderRepo->save($order);
+            $orderRepo->save($order);
 
-        (new BasketRepository())->setBasketOrder($order->id);
+            (new BasketRepository())->setBasketOrder($order->id);
 
-        header("Location: /order");
-        exit();
-
+            header("Location: /order");
+            exit();
+        }
     }
 }
